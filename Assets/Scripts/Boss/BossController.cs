@@ -118,10 +118,25 @@ public class BossController : MonoBehaviour
 
   public void ShootProjectile()
   {
-    if (projectilePrefab == null || playerTransform == null || stats == null) return;
+    if (playerTransform == null || stats == null) return;
 
-    GameObject projObj = Instantiate(projectilePrefab, firePoint != null ? firePoint.position : transform.position, Quaternion.identity);
-    Projectile proj = projObj.GetComponent<Projectile>();
+    Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position;
+    Projectile proj = null;
+
+    // Tenta pegar da Pool se ela existir na cena
+    if (ProjectilePool.Instance != null)
+    {
+      proj = ProjectilePool.Instance.Get();
+      proj.transform.position = spawnPos;
+      proj.transform.rotation = Quaternion.identity;
+    }
+    else if (projectilePrefab != null)
+    {
+      // Fallback caso a pool não esteja configurada
+      GameObject projObj = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+      proj = projObj.GetComponent<Projectile>();
+    }
+
     if (proj != null)
     {
       Vector2 direction = (playerTransform.position - transform.position).normalized;
