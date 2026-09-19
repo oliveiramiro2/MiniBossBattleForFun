@@ -58,8 +58,8 @@ Assets/
 
 ## ⌨️ Controles
 
-Ação                                Tecla / Botão
 ```text
+Ação                                Tecla / Botão
 • Movimentação                          Teclas A / D ou Setas Esquerda/Direita
 • Pular                                 Espaço
 • Dash (Investida)                      Left Shift
