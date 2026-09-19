@@ -55,15 +55,16 @@ Assets/
 
 ```
 ---
-```text
+
 ## ⌨️ Controles
 
-Ação                               Tecla / Botão
-Movimentação                          Teclas A / D ou Setas Esquerda/Direita
-###Pular                                 Espaço
-###Dash (Investida)                      Left Shift
-###Ataque Corpo a Corpo                  Tecla J ou Botão Esquerdo do Mouse
-###Reiniciar (Após Fim de Jogo)          Tecla R
+Ação                                Tecla / Botão
+```text
+• Movimentação                          Teclas A / D ou Setas Esquerda/Direita
+• Pular                                 Espaço
+• Dash (Investida)                      Left Shift
+• Ataque Corpo a Corpo                  Tecla J ou Botão Esquerdo do Mouse
+• Reiniciar (Após Fim de Jogo)          Tecla R
 ```
 
 ---
@@ -76,6 +77,8 @@ Movimentação                          Teclas A / D ou Setas Esquerda/Direita
 3 - Clique em Add project from disk e selecione a pasta raiz do projeto.
 
 4 - Abra a cena principal em Assets/Scenes/ e dê o Play!
+
+---
 
 ## ✒️ Autor
 Desenvolvido com foco em arquitetura de software, padrões de projeto e engenharia de jogos em C#.
