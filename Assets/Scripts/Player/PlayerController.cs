@@ -33,19 +33,11 @@ public class PlayerController : MonoBehaviour
   private Rigidbody2D _rb;
   private SpriteRenderer _spriteRenderer;
   private int _facingDirection = 1;
-  private HealthSystem _healthSystem;
 
   private void Awake()
   {
     _rb = GetComponent<Rigidbody2D>();
     _spriteRenderer = GetComponent<SpriteRenderer>();
-    _healthSystem = GetComponent<HealthSystem>();
-  }
-
-  void Start()
-  {
-    // Inscreve no evento de morte do HealthSystem
-    _healthSystem.OnDeath += Die;
   }
 
   private void Update()
@@ -125,20 +117,6 @@ public class PlayerController : MonoBehaviour
       }
     }
     Debug.Log("[Player] Ataque corpo a corpo executado!");
-  }
-
-  private void OnDestroy()
-  {
-    if (_healthSystem != null)
-    {
-      _healthSystem.OnDeath -= Die;
-    }
-  }
-
-  private void Die()
-  {
-    Debug.Log("O Player foi derrotado!");
-    Destroy(gameObject);
   }
 
   private void OnDrawGizmosSelected()
