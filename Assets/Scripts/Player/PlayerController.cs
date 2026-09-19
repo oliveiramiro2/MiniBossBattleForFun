@@ -6,23 +6,12 @@ using UnityEngine;
 [RequireComponent(typeof(HealthSystem))]
 public class PlayerController : MonoBehaviour
 {
-  [Header("Movement Settings")]
-  [SerializeField] private float moveSpeed = 8f;
-  [SerializeField] private float jumpForce = 12f;
+  [Header("Data Asset")]
+  [SerializeField] private PlayerStatsData stats;
 
-  [Header("Dash Settings")]
-  [SerializeField] private float dashSpeed = 22f;
-  [SerializeField] private float dashDuration = 0.15f;
-  [SerializeField] private float dashCooldown = 0.7f;
-  private bool _canDash = true;
-  private bool _isDashing;
-  public bool IsInvulnerable { get; private set; }
-
-  [Header("Combat Settings")]
+  [Header("Combat References")]
   [SerializeField] private Transform attackPoint;
-  [SerializeField] private float attackRange = 1.2f;
   [SerializeField] private LayerMask bossLayer;
-  [SerializeField] private float attackDamage = 25f;
 
   [Header("Ground Check")]
   [SerializeField] private Transform groundCheck;
@@ -33,6 +22,10 @@ public class PlayerController : MonoBehaviour
   private Rigidbody2D _rb;
   private SpriteRenderer _spriteRenderer;
   private int _facingDirection = 1;
+
+  private bool _canDash = true;
+  private bool _isDashing;
+  public bool IsInvulnerable { get; private set; }
 
   private void Awake()
   {
@@ -49,14 +42,13 @@ public class PlayerController : MonoBehaviour
   {
     if (_isDashing) return;
 
-    _rb.linearVelocity = new Vector2(direction * moveSpeed, _rb.linearVelocity.y);
+    _rb.linearVelocity = new Vector2(direction * stats.moveSpeed, _rb.linearVelocity.y);
 
     if (direction != 0)
     {
       _facingDirection = direction > 0 ? 1 : -1;
       _spriteRenderer.flipX = _facingDirection < 0;
 
-      // Atualiza a posição do ponto de ataque de acordo com a direção que o player olha
       if (attackPoint != null)
       {
         attackPoint.localPosition = new Vector3(Mathf.Abs(attackPoint.localPosition.x) * _facingDirection, attackPoint.localPosition.y, 0);
@@ -68,7 +60,7 @@ public class PlayerController : MonoBehaviour
   {
     if (_isDashing || !_isGrounded) return;
 
-    _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, jumpForce);
+    _rb.linearVelocity = new Vector2(_rb.linearVelocity.x, stats.jumpForce);
   }
 
   public void Dash()
@@ -86,19 +78,19 @@ public class PlayerController : MonoBehaviour
 
     float originalGravity = _rb.gravityScale;
     _rb.gravityScale = 0f;
-    _rb.linearVelocity = new Vector2(_facingDirection * dashSpeed, 0f);
+    _rb.linearVelocity = new Vector2(_facingDirection * stats.dashSpeed, 0f);
 
     Color originalColor = _spriteRenderer.color;
     _spriteRenderer.color = new Color(originalColor.r, originalColor.g, originalColor.b, 0.4f);
 
-    yield return new WaitForSeconds(dashDuration);
+    yield return new WaitForSeconds(stats.dashDuration);
 
     _rb.gravityScale = originalGravity;
     _isDashing = false;
     IsInvulnerable = false;
     _spriteRenderer.color = originalColor;
 
-    yield return new WaitForSeconds(dashCooldown);
+    yield return new WaitForSeconds(stats.dashCooldown);
     _canDash = true;
   }
 
@@ -106,17 +98,16 @@ public class PlayerController : MonoBehaviour
   {
     if (attackPoint == null) return;
 
-    // Detecta todos os inimigos (Boss) na área do ataque
-    Collider2D[] hitBosses = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, bossLayer);
+    Collider2D[] hitBosses = Physics2D.OverlapCircleAll(attackPoint.position, stats.attackRange, bossLayer);
     foreach (Collider2D bossCol in hitBosses)
     {
       HealthSystem bossHealth = bossCol.GetComponent<HealthSystem>();
       if (bossHealth != null)
       {
-        bossHealth.TakeDamage(attackDamage);
+        bossHealth.TakeDamage(stats.attackDamage);
       }
     }
-    Debug.Log("[Player] Ataque corpo a corpo executado!");
+    Debug.Log("[Player] Ataque executado!");
   }
 
   private void OnDrawGizmosSelected()
@@ -126,10 +117,10 @@ public class PlayerController : MonoBehaviour
       Gizmos.color = Color.red;
       Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
     }
-    if (attackPoint != null)
+    if (attackPoint != null && stats != null)
     {
       Gizmos.color = Color.green;
-      Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+      Gizmos.DrawWireSphere(attackPoint.position, stats.attackRange);
     }
   }
 }

@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 25, y: -18}
+  m_AnchoredPosition: {x: 9, y: -18}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &12899029
@@ -289,12 +289,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 742e6d82589ef45488051313e2c026fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BossController
+  stats: {fileID: 11400000, guid: 21f95019e719f6f4595e180bd0f226b2, type: 2}
   playerTransform: {fileID: 0}
-  meleeRange: 3
-  rangedRange: 15
   projectilePrefab: {fileID: 4407930667275568644, guid: 15efab1852ee8e946b00f53d218a8850, type: 3}
   firePoint: {fileID: 586657576}
-  meleeDamage: 20
 --- !u!61 &85101549
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1350,7 +1348,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 153, y: -19}
+  m_AnchoredPosition: {x: 165, y: -19}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &858414786
@@ -2551,17 +2549,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79571d3f65d2fa04bbc3d15b989bd03c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
-  moveSpeed: 8
-  jumpForce: 12
-  dashSpeed: 22
-  dashDuration: 0.15
-  dashCooldown: 0.7
+  stats: {fileID: 11400000, guid: 8dbbb7c79aae008479b8457d69d39429, type: 2}
   attackPoint: {fileID: 1763888088}
-  attackRange: 1.2
   bossLayer:
     serializedVersion: 2
     m_Bits: 64
-  attackDamage: 25
   groundCheck: {fileID: 572865280}
   groundCheckRadius: 0.2
   whatIsGround:

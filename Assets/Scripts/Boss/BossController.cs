@@ -5,19 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(HealthSystem))]
 public class BossController : MonoBehaviour
 {
-  [Header("Target & Ranges")]
-  [SerializeField] private Transform playerTransform;
-  [SerializeField] private float meleeRange = 3f;
-  [SerializeField] private float rangedRange = 8f;
+  [Header("Data Asset")]
+  [SerializeField] private BossStatsData stats;
+  public BossStatsData Stats => stats;
 
-  [Header("Combat & Projectiles")]
+  [Header("Target & References")]
+  [SerializeField] private Transform playerTransform;
   [SerializeField] private GameObject projectilePrefab;
   [SerializeField] private Transform firePoint;
-  [SerializeField] private float meleeDamage = 20f;
-  private float _meleeCooldown = 1.2f;
-  private float _meleeTimer;
 
-  // Estados
+  // Estados da FSM
   private IBossState _currentState;
   public BossIdleState IdleState { get; private set; }
   public BossMeleeState MeleeState { get; private set; }
@@ -27,6 +24,8 @@ public class BossController : MonoBehaviour
   public SpriteRenderer SpriteRenderer { get; private set; }
   public Transform PlayerTransform => playerTransform;
   private HealthSystem _healthSystem;
+
+  private float _meleeTimer;
 
   private void Awake()
   {
@@ -48,9 +47,7 @@ public class BossController : MonoBehaviour
       if (playerObj != null) playerTransform = playerObj.transform;
     }
 
-    // Inscreve no evento de morte do HealthSystem
     _healthSystem.OnDeath += Die;
-
     SwitchState(IdleState);
   }
 
@@ -82,15 +79,16 @@ public class BossController : MonoBehaviour
 
   private void EvaluateStateTransitions()
   {
-    if (playerTransform == null) return;
+    if (playerTransform == null || stats == null) return;
 
     float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-    if (distanceToPlayer <= meleeRange)
+    // Transições baseadas nos ranges definidos no ScriptableObject
+    if (distanceToPlayer <= stats.meleeRange)
     {
       if (_currentState != MeleeState) SwitchState(MeleeState);
     }
-    else if (distanceToPlayer <= rangedRange)
+    else if (distanceToPlayer <= stats.rangedRange)
     {
       if (_currentState != RangedState) SwitchState(RangedState);
     }
@@ -102,17 +100,17 @@ public class BossController : MonoBehaviour
 
   public void PerformMeleeAttack()
   {
-    if (_meleeTimer > 0 || playerTransform == null) return;
-    _meleeTimer = _meleeCooldown;
+    if (_meleeTimer > 0 || playerTransform == null || stats == null) return;
+    _meleeTimer = stats.meleeCooldown;
 
     float distance = Vector2.Distance(transform.position, playerTransform.position);
-    if (distance <= meleeRange + 0.5f)
+    if (distance <= stats.meleeRange + 0.5f)
     {
       HealthSystem playerHealth = playerTransform.GetComponent<HealthSystem>();
       PlayerController playerCtrl = playerTransform.GetComponent<PlayerController>();
       if (playerHealth != null)
       {
-        playerHealth.TakeDamage(meleeDamage, true, playerCtrl);
+        playerHealth.TakeDamage(stats.meleeDamage, true, playerCtrl);
         Debug.Log("[Boss] Ataque corpo a corpo acertou o Jogador!");
       }
     }
@@ -120,14 +118,14 @@ public class BossController : MonoBehaviour
 
   public void ShootProjectile()
   {
-    if (projectilePrefab == null || playerTransform == null) return;
+    if (projectilePrefab == null || playerTransform == null || stats == null) return;
 
     GameObject projObj = Instantiate(projectilePrefab, firePoint != null ? firePoint.position : transform.position, Quaternion.identity);
     Projectile proj = projObj.GetComponent<Projectile>();
     if (proj != null)
     {
       Vector2 direction = (playerTransform.position - transform.position).normalized;
-      proj.Initialize(direction);
+      proj.Initialize(direction, stats.projectileSpeed, stats.projectileDamage);
     }
   }
 
@@ -139,9 +137,10 @@ public class BossController : MonoBehaviour
 
   private void OnDrawGizmosSelected()
   {
+    if (stats == null) return;
     Gizmos.color = Color.yellow;
-    Gizmos.DrawWireSphere(transform.position, meleeRange);
+    Gizmos.DrawWireSphere(transform.position, stats.meleeRange);
     Gizmos.color = Color.cyan;
-    Gizmos.DrawWireSphere(transform.position, rangedRange);
+    Gizmos.DrawWireSphere(transform.position, stats.rangedRange);
   }
 }
