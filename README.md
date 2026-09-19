@@ -53,6 +53,7 @@ Assets/
  │    └── Core/ (GameManager)
  └── ScriptableObjects/ (PlayerStats, BossStats)
 
+```
 ## ⌨️ Controles
 
 ###Ação                               Tecla / Botão
