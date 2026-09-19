@@ -3,6 +3,8 @@ using UnityEngine;
 public class BossRangedState : IBossState
 {
   private BossController _boss;
+  private float _fireCooldown = 1.5f;
+  private float _fireTimer;
 
   public BossRangedState(BossController boss)
   {
@@ -11,13 +13,19 @@ public class BossRangedState : IBossState
 
   public void Enter()
   {
-    Debug.Log("[Boss FSM] Entrou no estado: MAGIA SOMBRIA (Projéteis em leque)");
-    _boss.SpriteRenderer.color = Color.purple; // Fica roxo sinalizando magia
+    Debug.Log("[Boss FSM] Entrou no estado: MAGIA SOMBRIA (Disparando projéteis)");
+    _boss.SpriteRenderer.color = Color.magenta;
+    _fireTimer = 0f;
   }
 
   public void UpdateState()
   {
-    // Lógica de disparo de projéteis à distância
+    _fireTimer += Time.deltaTime;
+    if (_fireTimer >= _fireCooldown)
+    {
+      _fireTimer = 0f;
+      _boss.ShootProjectile();
+    }
   }
 
   public void Exit() { }

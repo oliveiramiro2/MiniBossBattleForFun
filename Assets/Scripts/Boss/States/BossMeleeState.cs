@@ -11,13 +11,13 @@ public class BossMeleeState : IBossState
 
   public void Enter()
   {
-    Debug.Log("[Boss FSM] Entrou no estado: ATAQUE CORPO A CORPO (Machado/Tridente)");
-    _boss.SpriteRenderer.color = Color.red; // Fica vermelho sinalizando perigo iminente
+    Debug.Log("[Boss FSM] Entrou no estado: ATAQUE CORPO A CORPO");
+    _boss.SpriteRenderer.color = Color.red;
   }
 
   public void UpdateState()
   {
-    // Lógica de ataque corpo a corpo (ex: investida rápida ou golpe pesado)
+    _boss.PerformMeleeAttack();
   }
 
   public void Exit() { }
