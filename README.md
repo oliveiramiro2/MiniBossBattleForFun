@@ -54,14 +54,19 @@ Assets/
  └── ScriptableObjects/ (PlayerStats, BossStats)
 
 ```
+---
+```text
 ## ⌨️ Controles
 
-###Ação                               Tecla / Botão
-###Movimentação                          Teclas A / D ou Setas Esquerda/Direita
+Ação                               Tecla / Botão
+Movimentação                          Teclas A / D ou Setas Esquerda/Direita
 ###Pular                                 Espaço
 ###Dash (Investida)                      Left Shift
 ###Ataque Corpo a Corpo                  Tecla J ou Botão Esquerdo do Mouse
 ###Reiniciar (Após Fim de Jogo)          Tecla R
+```
+
+---
 
 ## 🚀 Como Executar o Projeto
 1 - Clone este repositório ou baixe os arquivos compactados.
